@@ -1,6 +1,6 @@
 # vim-schemer
 
-Tools for building vim color scheme previews.
+Tools for building vim color scheme previews
 
 * Exports preview of vim color schemes to html or json
 * Creates index of vim color schemes to html or json
