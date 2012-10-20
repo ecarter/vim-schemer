@@ -33,11 +33,7 @@
 <ul>
 <li>Exports preview of vim color schemes to html or json</li>
 <li>Creates index of vim color schemes to html or json</li>
-</ul><h2>Examples</h2>
-
-<p><a href="http://ecarter.github.com/vim-schemer/samples">Checkout sample index</a></p>
-
-<h2>Install</h2>
+</ul><h2>Install</h2>
 
 <pre><code>$ git clone https://github.com/ecarter/vim-schemer.git
 $ cd vim-schemer
@@ -50,9 +46,30 @@ $ npm link
 <ul>
 <li><a href="http://nodejs.org">Node.js</a></li>
 <li><a href="http://npmjs.org">npm</a></li>
-</ul><h2>Usage</h2>
+</ul><h2>Examples</h2>
 
-<pre><code>Usage: schemer [options]
+<p><strong>Build html preview:</strong></p>
+
+<pre><code>$ schemer colorscheme.vim --output colors.html
+</code></pre>
+
+<p><strong>Exports scheme to json:</strong></p>
+
+<pre><code>$ scheme colorscheme.vim --json colors.json
+</code></pre>
+
+<p><strong>Build html index of color schemes:</strong></p>
+
+<pre><code>$ schemer --index samples/
+</code></pre>
+
+<h2>Samples</h2>
+
+<p><a href="http://ecarter.github.com/vim-schemer/samples">Checkout sample index</a></p>
+
+<h2>Usage</h2>
+
+<pre><code>Usage: schemer [options] &lt;file ...&gt;
 
 Options:
 
