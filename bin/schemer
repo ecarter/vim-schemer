@@ -22,7 +22,7 @@ program
   .option('-n, --name <scheme>', 'color scheme name')
   .parse(process.argv);
 
-if ( program.json ) {
+if ( program.json && program.source ) {
   read(program.source, function (scheme) {
     var content = JSON.stringify(scheme, null, 2);
     fs.writeFile(program.json, content, function (err) {
@@ -46,7 +46,7 @@ if ( program.index ) {
     if (err) throw err;
     total = files.length;
     files.forEach( function (_file) {
-      if ( /^\./.test(_file) ) {
+      if ( /^\./.test(_file) || path.extname(_file) !== '.vim' ) {
         total--;
       } else {
         var file = path.join(program.index, _file)
@@ -76,22 +76,24 @@ function index (schemes) {
 
   var template = path.join(__dirname,'../support/index.jade')
     , file = path.join(program.output, 'index.html')
-    , json = path.join(program.output, 'index.json');
+    , json = program.json || path.join(program.output, 'index.json');
 
   console.log('schemes parsed:', schemes.length);
 
   fs.readFile(template, function (err, data) {
     if (err) throw err;
-    var fn = jade.compile(data.toString());
+    var fn = jade.compile(data.toString(), { pretty: true });
     var str = fn({ schemes: schemes });
     fs.writeFile(file, str, function (err) {
       if (err) throw err;
       console.log('index saved:', file);
     });
-    fs.writeFile(json, JSON.stringify(schemes, null, 2), function (err) {
-      if (err) throw err;
-      console.log('json index saved:', json);
-    });
+    if ( program.json ) {
+      fs.writeFile(json, JSON.stringify(schemes, null, 2), function (err) {
+        if (err) throw err;
+        console.log('json index saved:', json);
+      });
+    }
   });
 
 }
@@ -129,7 +131,7 @@ function html (_path, scheme) {
   var file = path.join(__dirname,'../support/scheme.jade');
   fs.readFile(file, function (err, data) {
     if (err) throw err;
-    var fn = jade.compile(data.toString());
+    var fn = jade.compile(data.toString(), { pretty: true });
     var str = fn(scheme)
     var file = scheme.name + '.html';
     fs.writeFile(_path, str, function (err) {
