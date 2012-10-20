@@ -13,7 +13,8 @@
   "dependencies": {
     "commander": "*",
     "serve": "*",
-    "jade": "*"
+    "jade": "*",
+    "mkdirp": "*"
   },
   "keywords": [
     "vim",
