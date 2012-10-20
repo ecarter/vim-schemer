@@ -7,7 +7,7 @@ Tools for building vim color scheme previews
 
 ## Examples
 
-[See samples](https://github.com/ecarter/vim-schemer/blob/master/samples)
+[Checkout sample index](http://ecarter.github.com/vim-schemer/samples)
 
 ## Install
 
