@@ -25,7 +25,7 @@ Tools for building vim color scheme previews
 
 **Exports scheme to json:**
 
-    $ scheme colorscheme.vim --json colors.json
+    $ schemer colorscheme.vim --json colors.json
 
 **Build html index of color schemes:**
 
