@@ -5,10 +5,6 @@ Tools for building vim color scheme previews
 * Exports preview of vim color schemes to html or json
 * Creates index of vim color schemes to html or json
 
-## Examples
-
-[Checkout sample index](http://ecarter.github.com/vim-schemer/samples)
-
 ## Install
 
     $ git clone https://github.com/ecarter/vim-schemer.git
@@ -21,9 +17,27 @@ Tools for building vim color scheme previews
 * [Node.js](http://nodejs.org)
 * [npm](http://npmjs.org)
 
+## Examples
+
+**Build html preview:**
+
+    $ schemer colorscheme.vim --output colors.html
+
+**Exports scheme to json:**
+
+    $ scheme colorscheme.vim --json colors.json
+
+**Build html index of color schemes:**
+
+    $ schemer --index samples/
+
+## Samples
+
+[Checkout sample index](http://ecarter.github.com/vim-schemer/samples)
+
 ## Usage
 
-    Usage: schemer [options]
+    Usage: schemer [options] <file ...>
 
     Options:
 
