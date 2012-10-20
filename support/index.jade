@@ -1,0 +1,23 @@
+doctype 5
+html
+  head
+    title color schemes
+    link(rel='stylesheet', media='all', href='../support/scheme.css')
+  body
+    ul.scheme-list
+      each scheme in schemes
+        li
+          - var style = ''
+          - style += !scheme.background ? '' : 'background: ' + scheme.background + '; '
+          - style += !scheme.foreground ? '' : 'color: ' + scheme.foreground + '; '
+          - style += 'text-decoration: none;'
+          a(href=scheme.file)
+            .title(style=style)= scheme._name
+            .color-list
+              - for (var prop in scheme.scheme)
+                - var color = scheme.scheme[prop]
+                - var width = (100 / scheme.count) + '%'
+                  .c(style='width: ' + width)
+                    .fg(style='background: ' + color.background + ';')
+                    .bg(style='background: ' + color.foreground + ';')
+

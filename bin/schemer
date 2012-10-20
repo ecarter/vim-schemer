@@ -1,0 +1,151 @@
+#!/usr/bin/env node
+
+/**
+ * Module Dependencies
+ */
+
+var program = require('commander')
+  , jade = require('jade')
+  , pkg = require('../package.json')
+  , fs = require('fs')
+  , path = require('path')
+  , schemer = require('../');
+
+// CLI
+
+program
+  .version(pkg.version)
+  .option('-s, --source <source>', 'source vim color scheme')
+  .option('-j, --json <dest>', 'output json file')
+  .option('-o, --output <dest>', 'output destination (.html | directory)')
+  .option('-i, --index <dir>', 'create scheme index')
+  .option('-n, --name <scheme>', 'color scheme name')
+  .parse(process.argv);
+
+if ( program.json ) {
+  read(program.source, function (scheme) {
+    var content = JSON.stringify(scheme, null, 2);
+    fs.writeFile(program.json, content, function (err) {
+      console.log('saved to:', program.json);
+    });
+  });
+}
+
+if ( program.output && program.source ) {
+  read(program.source, function (scheme) {
+    html(program.output, scheme);
+  });
+}
+
+if ( program.index ) {
+  var schemes = []
+    , count = 0
+    , total;
+
+  fs.readdir(program.index, function (err, files) {
+    if (err) throw err;
+    total = files.length;
+    files.forEach( function (_file) {
+      if ( /^\./.test(_file) ) {
+        total--;
+      } else {
+        var file = path.join(program.index, _file)
+          , dest = path.join(program.output, path.basename(_file, '.vim')) + '.html';
+        read(file, function (scheme) {
+          if ( empty(scheme.scheme) ) {
+            total--;
+            return false;
+          }
+          scheme.file = path.basename(dest);
+          schemes.push(scheme);
+          html(dest, scheme);
+          count++;
+          if ( count === total ) {
+            index(schemes);
+          }
+        });
+      }
+    });
+  });
+}
+
+/**
+ * Creates color scheme index
+ */
+function index (schemes) {
+
+  var template = path.join(__dirname,'../support/index.jade')
+    , file = path.join(program.output, 'index.html')
+    , json = path.join(program.output, 'index.json');
+
+  console.log('schemes parsed:', schemes.length);
+
+  fs.readFile(template, function (err, data) {
+    if (err) throw err;
+    var fn = jade.compile(data.toString());
+    var str = fn({ schemes: schemes });
+    fs.writeFile(file, str, function (err) {
+      if (err) throw err;
+      console.log('index saved:', file);
+    });
+    fs.writeFile(json, JSON.stringify(schemes, null, 2), function (err) {
+      if (err) throw err;
+      console.log('json index saved:', json);
+    });
+  });
+
+}
+
+/**
+ * Read source file
+ *
+ */
+
+function read (file, next) {
+  var count = 0;
+
+  fs.readFile(file, function (err, data) {
+    if (err) throw err;
+    var scheme = {};
+    scheme = schemer.parse( data.toString() );
+    scheme._name = path.basename(file);
+    if ( scheme.scheme.Normal ) {
+      scheme.background = scheme.scheme.Normal.background;
+    }
+    for (var prop in scheme.scheme) {
+      count++;
+    }
+    scheme.count = count;
+    next(scheme);
+  });
+}
+
+/**
+ * Saves color scheme to HTML file
+ *
+ */
+
+function html (_path, scheme) {
+  var file = path.join(__dirname,'../support/scheme.jade');
+  fs.readFile(file, function (err, data) {
+    if (err) throw err;
+    var fn = jade.compile(data.toString());
+    var str = fn(scheme)
+    var file = scheme.name + '.html';
+    fs.writeFile(_path, str, function (err) {
+      if (err) throw err;
+      console.log('saved to:', _path);
+    });
+  });
+}
+
+/**
+ * Checks if object is empty
+ */
+
+function empty (obj) {
+  for(var prop in obj) {
+    if(obj.hasOwnProperty(prop)) return false;
+  }
+  return true;
+}

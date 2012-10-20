@@ -1,0 +1,25 @@
+{
+  "name": "vim-schemer",
+  "version": "0.0.1",
+  "description": "tools for building vim color scheme previews",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ecarter/vim-schemer.git"
+  },
+  "bin": {
+    "schemer": "./bin/schemer" 
+  },
+  "dependencies": {
+    "commander": "*",
+    "serve": "*",
+    "jade": "*"
+  },
+  "keywords": [
+    "vim",
+    "color",
+    "colorscheme"
+  ],
+  "author": "Erin Carter",
+  "license": "MIT"
+}

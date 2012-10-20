@@ -1,0 +1,56 @@
+doctype 5
+html
+  head
+    title= _name
+    link(rel='stylesheet', media='all', href='../support/scheme.css')
+  - var bg = (typeof background !== 'undefined' ? background : '')
+  - var bodyclass = typeof contrast !== 'undefined' ? contrast : ''
+  body(class=bodyclass, style='background: ' + bg + '; color: ' + foreground + ';')
+    .container
+      header
+        h1= _name
+        .color-list
+          - for (var prop in scheme)
+            - var color = scheme[prop]
+            - var width = (100 / count) + '%'
+              .c(style='width: ' + width)
+                .fg(style='background: ' + color.background + ';')
+                .bg(style='background: ' + color.foreground + ';')
+      ul.scheme
+        - for (var name in scheme)
+          - var color = scheme[name]
+          - if (typeof color !== 'undefined')
+            li(title=name)
+              - var style = ''
+              - if (color.background)
+                - style += 'background: ' + color.background + '; '
+              - if (color.foreground)
+                - style += 'color: ' + color.foreground + '; '
+              - if (color.bold)
+                - style += 'font-weight: bold; '
+              - if (color.italic)
+                - style += 'font-style: italic; '
+              - if (color.underline)
+                - style += 'text-decoration: underline; '
+              span.title(style=style)= name
+              .option
+                .gui
+                  span(class='color foreground' + (color.foreground ? ' active' : '')
+                    style='background: ' + color.foreground
+                    title=color.foreground)
+                  span(class='color background' + (color.background ? ' active' : '')
+                    style='background: ' + color.background
+                    title=color.background)
+                  span(class='opt bold' + (color.bold ? ' active' : '')) b
+                  span(class='opt italic' + (color.italic ? ' active' : '')) i
+                  span(class='opt underline' + (color.underline ? ' active' : '')) u
+                .term
+                  span(class='color foreground' + (color.term_foreground ? ' active' : '')
+                    style='background: ' + color.term_foreground
+                    title=color.term_foreground_code)
+                  span(class='color background' + (color.term_background ? ' active' : '')
+                    style='background: ' + color.term_background
+                    title=color.term_background_code)
+                  span(class='opt bold' + (color.term_bold ? ' active' : '')) b
+                  span(class='opt italic' + (color.term_italic ? ' active' : '')) i
+                  span(class='opt underline' + (color.term_underline ? ' active' : '')) u
